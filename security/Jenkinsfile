@@ -21,7 +21,9 @@ pipeline {
             steps {
                 echo "Static security analysis of the application code..."
                 sh './auditenv/bin/pip install -q bandit'
-                sh './auditenv/bin/python -m bandit -r app/ -q'
+                // B104 skipped with justification: the app runs inside a container and
+                // must bind 0.0.0.0 to be reachable from outside the container network
+                sh './auditenv/bin/python -m bandit -r app/ -q --skip B104'
             }
         }
         stage('Image scan (trivy)') {

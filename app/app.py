@@ -7,7 +7,7 @@ from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 
 APP_VERSION = os.getenv("APP_VERSION", "3.0.0")
 FEATURE_BETA = os.getenv("FEATURE_BETA", "false").lower() == "true"
-LOG_DIR = os.getenv("LOG_DIR", "/tmp/lab3-logs")
+LOG_DIR = os.getenv("LOG_DIR", "logs")
 
 app = Flask(__name__)
 

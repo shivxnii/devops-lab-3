@@ -5,3 +5,4 @@ venv/
 *.log
 !docs/commands/*.log
 .terraform/
+logs/
