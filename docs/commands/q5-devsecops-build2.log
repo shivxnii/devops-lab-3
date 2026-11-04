@@ -1,0 +1,93 @@
+Started by user Abhinav
+Obtained security/Jenkinsfile from git https://github.com/theabhinav0231/devops-lab-3.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/devops-lab3-devsecops
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/devops-lab3-devsecops/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/theabhinav0231/devops-lab-3.git # timeout=10
+Fetching upstream changes from https://github.com/theabhinav0231/devops-lab-3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/theabhinav0231/devops-lab-3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 479e36f0ac6393f5fccea6adc1b3eedf3ae09c2c (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 479e36f0ac6393f5fccea6adc1b3eedf3ae09c2c # timeout=10
+Commit message: "add q4 elk stack evidence: logstash pipeline, es index with 765+ parsed docs"
+ > git rev-list --no-walk 479e36f0ac6393f5fccea6adc1b3eedf3ae09c2c # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/devops-lab3-devsecops/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/theabhinav0231/devops-lab-3.git # timeout=10
+Fetching upstream changes from https://github.com/theabhinav0231/devops-lab-3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/theabhinav0231/devops-lab-3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 479e36f0ac6393f5fccea6adc1b3eedf3ae09c2c (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 479e36f0ac6393f5fccea6adc1b3eedf3ae09c2c # timeout=10
+Commit message: "add q4 elk stack evidence: logstash pipeline, es index with 765+ parsed docs"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Dependency audit (pip-audit))
+[Pipeline] echo
+Auditing python dependencies against the PyPI advisory database...
+[Pipeline] sh
++ python3 -m venv auditenv
+[Pipeline] sh
++ ./auditenv/bin/pip install -q pip-audit
+[Pipeline] sh
++ ./auditenv/bin/pip-audit -r app/requirements.txt --desc off
+Found 6 known vulnerabilities in 2 packages
+Name   Version ID              Fix Versions
+------ ------- --------------- ------------
+flask  3.1.0   PYSEC-2026-1377 3.1.1
+flask  3.1.0   PYSEC-2026-2151 3.1.3
+flask  3.1.0   PYSEC-2026-1377 3.1.1
+flask  3.1.0   PYSEC-2026-2151 3.1.3
+pytest 8.3.4   PYSEC-2026-1845 9.0.3
+pytest 8.3.4   PYSEC-2026-1845 9.0.3
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Static analysis (bandit))
+Stage "Static analysis (bandit)" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Image scan (trivy))
+Stage "Image scan (trivy)" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+DevSecOps pipeline: BLOCKED - vulnerabilities found, fix the dependencies
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE

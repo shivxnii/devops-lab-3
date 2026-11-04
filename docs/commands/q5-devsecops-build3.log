@@ -1,0 +1,129 @@
+Started by user Abhinav
+Obtained security/Jenkinsfile from git https://github.com/theabhinav0231/devops-lab-3.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/devops-lab3-devsecops
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/devops-lab3-devsecops/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/theabhinav0231/devops-lab-3.git # timeout=10
+Fetching upstream changes from https://github.com/theabhinav0231/devops-lab-3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/theabhinav0231/devops-lab-3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 7880c46660b00a27a04bd1ff9e9ee63dd64c72ec (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 7880c46660b00a27a04bd1ff9e9ee63dd64c72ec # timeout=10
+Commit message: "fix dependency audit findings: bump flask to 3.1.3 and pytest to 9.0.3"
+ > git rev-list --no-walk 479e36f0ac6393f5fccea6adc1b3eedf3ae09c2c # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/devops-lab3-devsecops/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/theabhinav0231/devops-lab-3.git # timeout=10
+Fetching upstream changes from https://github.com/theabhinav0231/devops-lab-3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/theabhinav0231/devops-lab-3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 7880c46660b00a27a04bd1ff9e9ee63dd64c72ec (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 7880c46660b00a27a04bd1ff9e9ee63dd64c72ec # timeout=10
+Commit message: "fix dependency audit findings: bump flask to 3.1.3 and pytest to 9.0.3"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Dependency audit (pip-audit))
+[Pipeline] echo
+Auditing python dependencies against the PyPI advisory database...
+[Pipeline] sh
++ python3 -m venv auditenv
+[Pipeline] sh
++ ./auditenv/bin/pip install -q pip-audit
+[Pipeline] sh
++ ./auditenv/bin/pip-audit -r app/requirements.txt --desc off
+No known vulnerabilities found
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Static analysis (bandit))
+[Pipeline] echo
+Static security analysis of the application code...
+[Pipeline] sh
++ ./auditenv/bin/pip install -q bandit
+[Pipeline] sh
++ ./auditenv/bin/python -m bandit -r app/ -q
+Run started:2026-11-04 15:59:52.021637+00:00
+
+Test results:
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html
+   Location: app/app.py:10:31
+9	FEATURE_BETA = os.getenv("FEATURE_BETA", "false").lower() == "true"
+10	LOG_DIR = os.getenv("LOG_DIR", "/tmp/lab3-logs")
+11	
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: app/app.py:60:17
+59	if __name__ == "__main__":
+60	    app.run(host="0.0.0.0", port=5000)
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 43
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 2
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 2
+		High: 0
+Files skipped (0):
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Image scan (trivy))
+Stage "Image scan (trivy)" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+DevSecOps pipeline: BLOCKED - vulnerabilities found, fix the dependencies
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE

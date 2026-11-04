@@ -1,0 +1,9 @@
+$ ./venv/bin/pip install -q selenium
+$ python tests/selenium_test.py http://localhost:5004
+PASS  /health returned: {"status":"UP","version":"3.0.0"}
+PASS  /beta flag enabled: {"enabled":true,"feature":"beta","message":"Welcome to the beta feature"}
+PASS  screenshot saved: /home/abhinav/devops-lab-3/docs/screenshots/q6-selenium-beta-page.png
+
+$ chromedriver --version && google-chrome --version
+ChromeDriver 157.0.8103.38 (a733b5afbb3ba618844ff8876b89ad1a774b2f18-refs/branch-heads/8103@{#1034})
+Google Chrome 157.0.8103.38 

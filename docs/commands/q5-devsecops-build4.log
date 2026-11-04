@@ -1,0 +1,96 @@
+Started by user Abhinav
+Obtained security/Jenkinsfile from git https://github.com/theabhinav0231/devops-lab-3.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/devops-lab3-devsecops
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/devops-lab3-devsecops/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/theabhinav0231/devops-lab-3.git # timeout=10
+Fetching upstream changes from https://github.com/theabhinav0231/devops-lab-3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/theabhinav0231/devops-lab-3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 41077f4ce0f44c56ff742ecb34580a9596e768df (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 41077f4ce0f44c56ff742ecb34580a9596e768df # timeout=10
+Commit message: "address bandit findings: relative log dir and documented B104 skip for containerized binding"
+ > git rev-list --no-walk 7880c46660b00a27a04bd1ff9e9ee63dd64c72ec # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/devops-lab3-devsecops/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/theabhinav0231/devops-lab-3.git # timeout=10
+Fetching upstream changes from https://github.com/theabhinav0231/devops-lab-3.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.43.0'
+ > git fetch --tags --force --progress -- https://github.com/theabhinav0231/devops-lab-3.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 41077f4ce0f44c56ff742ecb34580a9596e768df (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 41077f4ce0f44c56ff742ecb34580a9596e768df # timeout=10
+Commit message: "address bandit findings: relative log dir and documented B104 skip for containerized binding"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Dependency audit (pip-audit))
+[Pipeline] echo
+Auditing python dependencies against the PyPI advisory database...
+[Pipeline] sh
++ python3 -m venv auditenv
+[Pipeline] sh
++ ./auditenv/bin/pip install -q pip-audit
+[Pipeline] sh
++ ./auditenv/bin/pip-audit -r app/requirements.txt --desc off
+No known vulnerabilities found
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Static analysis (bandit))
+[Pipeline] echo
+Static security analysis of the application code...
+[Pipeline] sh
++ ./auditenv/bin/pip install -q bandit
+[Pipeline] sh
++ ./auditenv/bin/python -m bandit -r app/ -q --skip B104
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Image scan (trivy))
+[Pipeline] echo
+Scanning the deployed container image for HIGH/CRITICAL CVEs...
+[Pipeline] sh
++ trivy image --severity HIGH,CRITICAL --quiet abhinaaav/devops-lab2-app:2.1.3
++ tail -5
+│               ├─────────────────┤          │              │                                   ├───────────────┼─────────────────────────────────────────────────────────────┤
+│               │ CVE-2026-78410  │          │              │                                   │               │ util-linux: util-linux: restricted bind mounts do not pin   │
+│               │                 │          │              │                                   │               │ the source, allowing X-mount.owner/group/mode...            │
+│               │                 │          │              │                                   │               │ https://avd.aquasec.com/nvd/cve-2026-78410                  │
+└───────────────┴─────────────────┴──────────┴──────────────┴───────────────────────────────────┴───────────────┴─────────────────────────────────────────────────────────────┘
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+DevSecOps pipeline: no blocking vulnerabilities found
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
