@@ -1,0 +1,66 @@
+$ docker run -d --name lab3node -p 8081:80 ubuntu:24.04 sleep infinity
+$ docker exec lab3node apt-get install -y python3 nginx   # base for the managed node
+
+$ ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
+
+PLAY [Configure the control machine (localhost)] *******************************
+
+TASK [Gathering Facts] *********************************************************
+[WARNING]: Host 'localhost' is using the discovered Python interpreter at '/usr/bin/python3.12', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.21/reference_appendices/interpreter_discovery.html for more information.
+ok: [localhost]
+
+TASK [Create a lab report directory] *******************************************
+ok: [localhost]
+
+TASK [Record the managed hosts] ************************************************
+ok: [localhost]
+
+PLAY [Configure the managed node and deploy the app page] **********************
+
+TASK [Gathering Facts] *********************************************************
+ok: [lab3node]
+
+TASK [Install nginx] ***********************************************************
+ok: [lab3node]
+
+TASK [Deploy the application index page] ***************************************
+changed: [lab3node]
+
+TASK [Start nginx (container has no systemd)] **********************************
+ok: [lab3node]
+
+TASK [Check nginx responds] ****************************************************
+ok: [lab3node]
+
+TASK [Show the deployed page] **************************************************
+ok: [lab3node] => {
+    "msg": "nginx responded HTTP 200 with the deployed page"
+}
+
+PLAY RECAP *********************************************************************
+lab3node                   : ok=6    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+
+$ curl http://localhost:8081/   (deployed page on the managed node)
+<h1>Lab 3 - configured by Ansible</h1>
+<p>Host: lab3node</p>
+<p>App version: 3.0.0</p>
+
+
+### IDEMPOTENCY CHECK: second run should change nothing
+$ ansible-playbook -i ansible/inventory.ini ansible/playbook.yml (2nd run)
+[WARNING]: Host 'localhost' is using the discovered Python interpreter at '/usr/bin/python3.12', but future installation of another Python interpreter could cause a different interpreter to be discovered. See https://docs.ansible.com/ansible-core/2.21/reference_appendices/interpreter_discovery.html for more information.
+PLAY [Configure the control machine (localhost)] *******************************
+ok: [localhost]
+ok: [localhost]
+ok: [localhost]
+ok: [lab3node]
+ok: [lab3node]
+ok: [lab3node]
+ok: [lab3node]
+ok: [lab3node]
+ok: [lab3node] => {
+PLAY RECAP *********************************************************************
+lab3node                   : ok=6    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
