@@ -1,0 +1,10 @@
+$ bandit -r app/   (static security analysis)
+		Medium: 2
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 2
+		High: 0
+Files skipped (0):
+bandit exit code: 0
