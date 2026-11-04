@@ -1,0 +1,14 @@
+### FEATURE FLAG: same image, different behavior via FEATURE_BETA env var
+$ docker run -d --name lab3-flag -p 5004:5000 -e FEATURE_BETA=false devops-lab3-app:3.0.0
+
+flag OFF: curl http://localhost:5004/beta
+HTTP 404
+{"enabled":false,"feature":"beta"}
+
+
+$ docker rm -f lab3-flag && docker run -d -e FEATURE_BETA=true ...   (flag toggled)
+
+flag ON: curl http://localhost:5004/beta
+HTTP 200
+{"enabled":true,"feature":"beta","message":"Welcome to the beta feature"}
+
